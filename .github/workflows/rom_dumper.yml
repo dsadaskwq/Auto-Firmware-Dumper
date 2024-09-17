@@ -31,9 +31,6 @@ on:
         default: 'false'
         type: boolean
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   dump:
     name: Auto Firmware Dumper
@@ -92,9 +89,9 @@ jobs:
     - name: Setting up Git
       run: |
         git config --global user.name "${{ env.UN }}"
-        git config --global user.email "${{ env.UEM }}"   
-        # 使用 GitHub Token 进行登录
-        echo "${{ secrets.GTOKEN }}" | gh auth login --with-token
+        git config --global user.email "${{ env.UEM }}"
+        unset GITHUB_TOKEN
+        gh auth login --with-token <<< "${{ secrets.GTOKEN }}"
 
     - name: Uploading ROM Dump
       run: |
